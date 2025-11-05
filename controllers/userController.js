@@ -7,26 +7,42 @@ const users = require('../model/usermodel');
 exports.registerController = async (req, res) => {
   const { username, email, password } = req.body;
   try {
-    console.log(username, email, password);
-    res.status(200).json('Request received');
+    if (!username || !email || !password)
+      return res.status(400).json('All fields are required');
+
+    // check if user already exists
+    const existingUser = await users.findOne({ email });
+    if (existingUser) return res.status(409).json('Email already registered');
+
+    // save new user to DB
+    const newUser = new users({ username, email, password });
+    await newUser.save();
+
+    console.log(`✅ Registered user: ${email}`);
+    res.status(200).json('Registration successful');
   } catch (err) {
+    console.error('❌ Registration error:', err.message);
     res.status(500).json({ message: 'Error in registration', error: err.message });
   }
 };
-
 // LOGIN
 exports.loginController = async (req, res) => {
   const { email, password } = req.body;
   try {
+    if (!email || !password)
+      return res.status(400).json('Email and password required');
+
     const existingUser = await users.findOne({ email });
     if (!existingUser) return res.status(404).json('Incorrect email id');
-    if (existingUser.password !== password) return res.status(401).json('Incorrect password');
+    if (existingUser.password !== password)
+      return res.status(401).json('Incorrect password');
 
     const token = jwt.sign({ userMail: existingUser.email }, 'secretKey', { expiresIn: '1h' });
     console.log('✅ Generated token:', token);
 
     res.status(200).json({ existingUser, token });
   } catch (err) {
+    console.error('❌ Login error:', err.message);
     res.status(500).json({ message: 'Internal server error', error: err.message });
   }
 };

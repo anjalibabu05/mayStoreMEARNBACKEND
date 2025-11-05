@@ -9,7 +9,7 @@ exports.addBookController = async (req, res) => {
     tittle,
     author,
     noOfPages,
-    ImageUrl,
+    imageUrl,
     price,
     dPrice,
     abstract,
@@ -20,8 +20,8 @@ exports.addBookController = async (req, res) => {
   } = req.body;
 
   // ✅ Map uploaded files to filenames
-  const uploadedimages = req.files?.map(file => file.filename) || [];
-  console.log('🖼 Uploaded images:', uploadedimages);
+  const uploadimages = req.files?.map(file => file.filename) || [];
+  console.log('🖼 Uploaded images:', uploadimages);
 
   const email = req.email;
   console.log('👤 User email:', email);
@@ -33,7 +33,7 @@ exports.addBookController = async (req, res) => {
     }
 
     // 2️⃣ Ensure at least one image is uploaded
-    if (!uploadedimages.length) {
+    if (!uploadimages.length) {
       return res.status(400).json({ message: "Please upload at least one image" });
     }
 
@@ -50,7 +50,7 @@ exports.addBookController = async (req, res) => {
       tittle,
       author,
       noOfPages,
-      ImageUrl,
+      imageUrl,
       price,
       dPrice,
       abstract,
@@ -58,7 +58,7 @@ exports.addBookController = async (req, res) => {
       language,
       isbn,
       category,
-      uploadedimages,  // ✅ matches schema
+      uploadimages,  // ✅ matches schema
       userEmail: email,
       status: "pending"
     });
@@ -196,14 +196,14 @@ exports.getAllBookAdminController = async (req, res) => {
 // Aprove Controller
 
 exports.approveBookController = async (req, res) => {
-  const { _id, tittle, author, noOfPages, ImageUrl, price, dPrice, abstract, publisher, language, isbn, category, uploadedimages, status, userEmail, brought } = req.body
+  const { _id, tittle, author, noOfPages, imageUrl, price, dPrice, abstract, publisher, language, isbn, category, uploadedimages, status, userEmail, brought } = req.body
 
-  console.log(_id, tittle, author, noOfPages, ImageUrl, price, dPrice, abstract, publisher, language, isbn, category, uploadedimages, status, userEmail, brought,
+  console.log(_id, tittle, author, noOfPages, imageUrl, price, dPrice, abstract, publisher, language, isbn, category, uploadedimages, status, userEmail, brought,
   );
 
   try {
 
-    const existingBook = await books.findByIdAndUpdate({ _id }, { _id, tittle, author, noOfPages, ImageUrl, price, dPrice, abstract, publisher, language, isbn, category, uploadedimages, status: 'Approved', userEmail, brought }, { new: true })
+    const existingBook = await books.findByIdAndUpdate({ _id }, { _id, tittle, author, noOfPages, imageUrl, price, dPrice, abstract, publisher, language, isbn, category, uploadedimages, status: 'Approved', userEmail, brought }, { new: true })
 
     // await existingBook.save()
     res.status(200).json(existingBook)
@@ -228,7 +228,7 @@ exports.makePaymentController = async (req, res) => {
       title: bookDetails.title,
       author: bookDetails.author,
       noOfPages: bookDetails.noOfPages,
-      ImageUrl: bookDetails.price,
+      imageUrl: bookDetails.price,
       price: bookDetails.price,
       dPrice: bookDetails.dPrice,
       abstract: bookDetails.abstract.slice(0,20),
@@ -251,12 +251,12 @@ exports.makePaymentController = async (req, res) => {
         product_data: {
           name: bookDetails.title,
           description: `${bookDetails.author} | ${bookDetails.publisher}`,
-          images: [bookDetails.ImageUrl],
+          images: [bookDetails.imageUrl],
           metadata: {
             title: bookDetails.title,
             author: bookDetails.author,
             noOfPages: bookDetails.noOfPages,
-            ImageUrl: bookDetails.price,
+            imageUrl: bookDetails.price,
             price: bookDetails.price,
             dPrice: bookDetails.dPrice,
             abstract: bookDetails.abstract,

@@ -4,7 +4,7 @@ const bookSchema = new mongoose.Schema({
   tittle: { type: String, required: true },
   author: { type: String, required: true },
   noOfPages: { type: Number, required: true },
-  ImageUrl: { type: String, required: true },
+  imageUrl: { type: String, required: true },
   price: { type: Number, required: true },
   dPrice: { type: Number, required: true },
   abstract: { type: String, required: true },
@@ -12,7 +12,7 @@ const bookSchema = new mongoose.Schema({
   language: { type: String, required: true },
   isbn: { type: String, required: true },
   category: { type: String, required: true },
-  uploadedimages: { type: [String], required: true }, // ✅ array of filenames
+  uploadimages: { type: [String], required: true }, // ✅ array of filenames
   status: { type: String, required: true },
   userEmail: { type: String, required: true },
   brought: { type: String, default: "" }

@@ -1,45 +1,22 @@
-// Load environment variables from .env
-require('dotenv').config()
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const routes = require('./routes');
+require('./databaseConnection');
 
-// Import express
-const express = require('express')
+const bookstoreServer = express();
 
-// Import cors
-const cors = require('cors')
+bookstoreServer.use(cors());
+bookstoreServer.use(express.json());
 
-// Import routes
-const routes = require('./routes')
+// static folders
+bookstoreServer.use('/upload', express.static('./uploads'));
+bookstoreServer.use('/pdfUploads', express.static('./pdfUploads'));
 
-// Import optional middleware (if used)
-const appMiddleware = require('./middlewares/appMiddleware')
+// main routes
+bookstoreServer.use('/', routes);
 
-// Import DB connection file
-require('./databaseConnection')
-
-// Create express server instance
-const bookstoreServer = express()
-
-// Apply middlewares
-bookstoreServer.use(cors())
-bookstoreServer.use(express.json()) // Parse JSON request body
-// bookstoreServer.use(appMiddleware) // Uncomment only if you have it defined
-
-// Use your routes
-bookstoreServer.use('/', routes)
-
-// export uploads folder to frontend
-
-bookstoreServer.use('/upload',express.static('./uploads'))
-
-// Port configuration (⚠️ fix here)
-const PORT = process.env.PORT || 4000
-
-// Start the server
+const PORT = process.env.PORT || 4000;
 bookstoreServer.listen(PORT, () => {
-  console.log(`✅ Server is running on port: ${PORT}`)
-})
-// export the pdfUploads folder from server
-
-bookstoreServer.use('/pdfUploads',express.static('./pdfUploads'))
-
-
+  console.log(`✅ Server is running on port: ${PORT}`);
+});
