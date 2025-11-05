@@ -6,16 +6,33 @@ require('./databaseConnection');
 
 const bookstoreServer = express();
 
-bookstoreServer.use(cors());
+// CORS configuration
+const allowedOrigins = [
+  'https://may-store-mearn-h3dg.vercel.app',
+  'http://localhost:5173',
+];
+
+bookstoreServer.use(cors({
+  origin: function(origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error('Not allowed by CORS'));
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true
+}));
+
+// JSON parser
 bookstoreServer.use(express.json());
 
-// static folders
+// Static folders
 bookstoreServer.use('/upload', express.static('./uploads'));
 bookstoreServer.use('/pdfUploads', express.static('./pdfUploads'));
 
-// main routes
+// Main routes
 bookstoreServer.use('/', routes);
 
+// Start server
 const PORT = process.env.PORT || 4000;
 bookstoreServer.listen(PORT, () => {
   console.log(`✅ Server is running on port: ${PORT}`);
