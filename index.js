@@ -8,8 +8,9 @@ const bookstoreServer = express();
 
 // CORS configuration
 const allowedOrigins = [
-  'https://may-store-mearn-h3dg.vercel.app',
-  'http://localhost:5173',
+  'https://may-store-mearn-jaup.vercel.app', // ✅ your deployed frontend
+  'https://may-store-mearn-h3dg.vercel.app', // optional old build
+  'http://localhost:5173',                   // dev environment
 ];
 
 bookstoreServer.use(cors({
