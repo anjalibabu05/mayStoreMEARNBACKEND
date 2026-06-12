@@ -11,7 +11,7 @@ const allowedOrigins = [
   'https://may-store-mearn-jaup.vercel.app',
   'https://may-store-mearn-h3dg.vercel.app',
   'https://may-store-mearn-jaup-pluk4y7x6-anjaly-babus-projects.vercel.app',
-  'https://may-store-mearn-jaup-git-master-anjaly-babus-projects.vercel.app'.
+  'https://may-store-mearn-jaup-git-master-anjaly-babus-projects.vercel.app',
   'http://localhost:5173',
 ];
 
